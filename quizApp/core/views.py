@@ -44,7 +44,7 @@ def create_quiz(request,num,no):
         if request.method == "POST":
             form = QuestionForm(request.POST)
             if form.is_valid():
-                #form.save()
+                form.save()
                 no+=1
                 return redirect(f'/create-quiz/{num}/{no}')
     else:

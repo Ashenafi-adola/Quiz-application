@@ -8,13 +8,21 @@ class ExamTaker(models.Model):
 
     def __str__(self):
         return self.full_name
-    
+
 class Exam(models.Model):
+    title = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.title
+
+class Question(models.Model):
+    #exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     question = models.TextField()
-    choice1 = models.CharField(max_length=255)
-    choice2 = models.CharField(max_length=255)
-    choice3 = models.CharField(max_length=255)
-    choice4 = models.CharField(max_length=255)
+    A = models.CharField(max_length=255)
+    B = models.CharField(max_length=255)
+    C = models.CharField(max_length=255)
+    D = models.CharField(max_length=255)
+    Answer = models.CharField(max_length=1)
 
     def __str__(self):
         return self.question
