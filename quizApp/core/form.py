@@ -5,3 +5,8 @@ class QuestionForm(ModelForm):
     class Meta:
         model = Question
         fields = "__all__"
+        exclude = ["exam"]
+class StartForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ['exam']

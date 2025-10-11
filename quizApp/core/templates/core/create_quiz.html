@@ -2,17 +2,38 @@
 {% block title %}Create quiz{% endblock %}
 
 {% block content %}
-{% if start == 'no' %}
-<form action="" method="get">
-    <input type="number" name="num_of_questions">
-    <button type="submit" name="start" value="start">Start</button>
-</form>
-{% else %}
+<style>
+    .container{
+        height: auto;
+        border: solid gray 1px;
+        padding: 5px;
+    }
+    textarea{
+        display: block;
+        height: 50px;
+        width: 96%;
+        margin: 10px;
+    }
+    input{
+        margin: 5px;
+        width: 500px;
+    }
+</style>
+<div class="container">
+    {% if start == 'no' %}
+    <form action="" method="get" >
+        {{form}}
+        <input type="number" name="num_of_questions">
+        <button type="submit" name="start" value="start">Start</button>
+    </form>
+    {% else %}
+    
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">save</button>
+    </form>
+    {% endif %}
+</div>
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">save</button>
-</form>
-{% endif %}
 {% endblock %}

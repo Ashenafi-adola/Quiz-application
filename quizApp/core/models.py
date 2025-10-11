@@ -11,12 +11,11 @@ class ExamTaker(models.Model):
 
 class Exam(models.Model):
     title = models.CharField(max_length=30)
-
     def __str__(self):
         return self.title
 
 class Question(models.Model):
-    #exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     question = models.TextField()
     A = models.CharField(max_length=255)
     B = models.CharField(max_length=255)
@@ -26,3 +25,10 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question
+    
+class Mark(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    mark = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.mark}"

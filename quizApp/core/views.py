@@ -3,10 +3,9 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 import json
 from .models import Exam, ExamTaker
-from .form import QuestionForm
+from .form import QuestionForm, StartForm
 
 
-question = {}
 def Signin(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -17,6 +16,7 @@ def Signin(request):
             return redirect('start-quiz')
         elif user is not None:
             login(request,user)
+            return redirect()
     context = {
 
     }
@@ -24,29 +24,33 @@ def Signin(request):
 @login_required(login_url='signin')
 def start_quiz(request):
     start = 'no'
+    form = StartForm()
     if request.GET.get('start') == 'start':
+        id = request.GET.get('exam')
+        exam = Exam.objects.get(id=id)
         number_of_questions = int(request.GET.get('num_of_questions'))
         if number_of_questions >= 5:
             begin = 1
-            return redirect(f'/create-quiz/{number_of_questions}/{begin}')
+            return redirect(f'/create-quiz/{exam}/{number_of_questions}/{begin}')
     
     context = {
         "start":start,
+        "form":form,
     }
     return render(request, 'core/create_quiz.html',context)
 
 @login_required(login_url='signin')
-def create_quiz(request,num,no):
+def create_quiz(request,exam,num,no):
     start = 'yes'
-    
     if no <= num:
         form = QuestionForm()
         if request.method == "POST":
             form = QuestionForm(request.POST)
             if form.is_valid():
-                form.save()
+                form = form.save(commit=False)
+                form.Exam = exam
                 no+=1
-                return redirect(f'/create-quiz/{num}/{no}')
+                return redirect(f'/create-quiz/{exam}/{num}/{no}')
     else:
         return redirect('complete')
     context = {
@@ -63,5 +67,7 @@ def complete(request):
 def takeExam(request):
     questions = Exam.objects.all()
     
+    context = {
 
-    return render(request,'core/')
+    }
+    return render(request,'core/start-exam.html',context)
