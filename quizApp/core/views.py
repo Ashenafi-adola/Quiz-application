@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-import json
 from .models import Exam, ExamTaker, Question
 from .form import  StartForm, TakeExamForm
 
@@ -16,7 +15,7 @@ def Signin(request):
             return redirect('start-quiz')
         elif user is not None:
             login(request,user)
-            return redirect()
+            return redirect('start-quiz')
     context = {
 
     }
@@ -32,6 +31,7 @@ def start_quiz(request):
         number_of_questions = int(request.GET.get('num_of_questions'))
         if number_of_questions >= 5:
             begin = 1
+            
             return redirect(f'/create-quiz/{exam}/{number_of_questions}/{begin}')
     
     context = {
@@ -81,25 +81,13 @@ def complete(request):
 def startExam(request):
     form = TakeExamForm()
     if request.method == "POST":
-        form = TakeExamForm(request.POST)
-        if form.is_valid():
-            theform = form.save(commit=False)
-            theform.user = request.user
+        exam = request.POST.get('exam')
+        return redirect('take-quiz')
     context = {
         "form":form,
 
     }
     return render(request,'core/start-exam.html',context)
-
 def takeExam(request):
-    form = TakeExamForm()
-    if request.method == "POST":
-        form = TakeExamForm(request.POST)
-        if form.is_valid():
-            theform = form.save(commit=False)
-            theform.user = request.user
-    context = {
-        "form":form,
-
-    }
-    return render(request,'core/start-exam.html',context)
+    
+    return render(request,'core/take-exam.html',{})
