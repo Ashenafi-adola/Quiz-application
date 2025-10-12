@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 import json
 from .models import Exam, ExamTaker, Question
-from .form import QuestionForm, StartForm
+from .form import QuestionForm, StartForm, TakeExamForm
 
 
 def Signin(request):
@@ -80,9 +80,9 @@ def complete(request):
 
 def takeExam(request):
     questions = Question.objects.all()
-    list(questions)
-    print(questions)
+    form = TakeExamForm()
     context = {
-
+        "form":form,
+        
     }
     return render(request,'core/start-exam.html',context)

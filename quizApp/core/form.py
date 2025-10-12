@@ -12,3 +12,9 @@ class StartForm(ModelForm):
     class Meta:
         model = Question
         fields = ['exam']
+
+class TakeExamForm(ModelForm):
+    class Meta:
+        model = ExamTaker
+        fields = "__all__"
+        exclude = ['mark','user']
