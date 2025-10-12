@@ -6,17 +6,23 @@
     .container{
         height: auto;
         border: solid gray 1px;
-        padding: 5px;
+        padding:10px;
+        width: 85%;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 800px;
+        background-color: rgb(224, 240, 255);
+        
     }
     textarea{
         display: block;
         height: 50px;
-        width: 96%;
-        margin: 10px;
+        width: 99%;
     }
     input{
-        margin: 5px;
-        width: 500px;
+        width: 99%;
+        height: 35px;
+        display: block;
     }
 </style>
 <div class="container">
@@ -30,7 +36,18 @@
     
     <form action="" method="post">
         {% csrf_token %}
-        {{form.as_p}}
+        <label for="question">Question:</label>
+        <textarea name="question" id=""></textarea>
+        <label for="A">A:</label>
+        <input type="text" name="A">
+        <label for="B">B:</label>
+        <input type="text" name="B">
+        <label for="C">C:</label>
+        <input type="text" name="C">
+        <label for="D">D:</label>
+        <input type="text" name="D">
+        <label for="answer">Answer: </label>
+        <input type="text" name="answer">
         <button type="submit">save</button>
     </form>
     {% endif %}

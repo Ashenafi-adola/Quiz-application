@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 import json
-from .models import Exam, ExamTaker
+from .models import Exam, ExamTaker, Question
 from .form import QuestionForm, StartForm
 
 
@@ -21,6 +21,7 @@ def Signin(request):
 
     }
     return render(request, 'core/login.html',context)
+
 @login_required(login_url='signin')
 def start_quiz(request):
     start = 'no'
@@ -43,19 +44,32 @@ def start_quiz(request):
 def create_quiz(request,exam,num,no):
     start = 'yes'
     if no <= num:
-        form = QuestionForm()
         if request.method == "POST":
-            form = QuestionForm(request.POST)
-            if form.is_valid():
-                form = form.save(commit=False)
-                form.Exam = exam
+            Ques = request.POST.get("question")
+            A = request.POST.get("A")
+            B = request.POST.get("B")
+            C = request.POST.get("C")
+            D = request.POST.get("C")
+            Ans = request.POST.get("answer")
+            theExam = Exam.objects.get(title=exam)
+            if Ques is not "" and A is not '' and B is not '' and C is not '' and D is not '' and Ans is not '':
+                question = theExam.question_set.create(
+                    question=Ques,
+                    A=A,
+                    B=B,
+                    C=C,
+                    D=D,
+                    Answer=Ans
+                )
+                question.save()
                 no+=1
                 return redirect(f'/create-quiz/{exam}/{num}/{no}')
+            else:
+                pass
     else:
         return redirect('complete')
     context = {
         "start":start,
-        "form": form,
     }
     return render(request, 'core/create_quiz.html',context)
 
@@ -65,8 +79,9 @@ def complete(request):
     return render(request,'core/complete.html',{})
 
 def takeExam(request):
-    questions = Exam.objects.all()
-    
+    questions = Question.objects.all()
+    list(questions)
+    print(questions)
     context = {
 
     }
