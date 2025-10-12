@@ -10,7 +10,6 @@ class Exam(models.Model):
 class ExamTaker(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=200)
     mark = models.IntegerField()
 
     def __str__(self):
