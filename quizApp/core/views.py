@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Exam, ExamTaker, Question
-from .form import  StartForm, TakeExamForm
+from .form import TakeExamForm
 
 
 def Signin(request):
@@ -15,7 +15,7 @@ def Signin(request):
             return redirect('start-quiz')
         elif user is not None:
             login(request,user)
-            return redirect('start-quiz')
+            return redirect('take-quiz')
     context = {
 
     }
@@ -24,10 +24,10 @@ def Signin(request):
 @login_required(login_url='signin')
 def start_quiz(request):
     start = 'no'
-    form = StartForm()
     if request.GET.get('start') == 'start':
-        id = request.GET.get('exam')
-        exam = Exam.objects.get(id=id)
+        title = request.GET.get('title')
+        exam = Exam(title=title)
+        exam.save()
         number_of_questions = int(request.GET.get('num_of_questions'))
         if number_of_questions >= 5:
             begin = 1
@@ -36,12 +36,12 @@ def start_quiz(request):
     
     context = {
         "start":start,
-        "form":form,
     }
     return render(request, 'core/create_quiz.html',context)
 
 @login_required(login_url='signin')
 def create_quiz(request,exam,num,no):
+    Answers = ['A','B','C','D','a','b','c','d']
     start = 'yes'
     if no <= num:
         if request.method == "POST":
@@ -52,7 +52,7 @@ def create_quiz(request,exam,num,no):
             D = request.POST.get("C")
             Ans = request.POST.get("answer")
             theExam = Exam.objects.get(title=exam)
-            if Ques is not "" and A is not '' and B is not '' and C is not '' and D is not '' and Ans is not '':
+            if Ques is not '' and A is not '' and B is not '' and C is not '' and D is not '' and Ans in Answers:
                 question = theExam.question_set.create(
                     question=Ques,
                     A=A,
