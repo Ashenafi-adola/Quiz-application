@@ -25,7 +25,7 @@ class Question(models.Model):
     Answer = models.CharField(max_length=1)
 
     def __str__(self):
-        return f"{self.question} {self.exam}"
+        return f'{self.question}'
     
 class Mark(models.Model):
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)

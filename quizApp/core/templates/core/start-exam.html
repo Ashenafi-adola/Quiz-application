@@ -6,10 +6,10 @@
     <title>Start Exam</title>
 </head>
 <body>
-    <form action="" method="POST">
+    <form action="" method="post">
         {% csrf_token %}
-        {{form}}
-        <button type="submit">Start</button>
+        <input type="text" name="title" placeholder="Enter the Exam title">
+        <button>Start</button>
     </form>
 </body>
 </html>

@@ -6,9 +6,18 @@
     <title>Take Exam</title>
 </head>
 <body>
-    <form action="" method="get">
-        <input type="text" name="title" placeholder="Enter the Exam title">
-        <button>Start</button>
-    </form>
+    <div>
+        <form action="" method="get">
+            <h3>{{question.question}}</h3>
+            <label for="A">A: {{question.A}}</label>
+            <input type="radio" name="A" value="A">
+            <label for="B">B: {{question.B}}</label>
+            <input type="radio" name="B" value="A">
+            <label for="C">C: {{question.C}}</label>
+            <input type="radio" name="C" value="C">
+            <label for="D">D: {{question.D}}</label>
+            <input type="radio" name="D" value="D">
+        </form>
+    </div>
 </body>
 </html>

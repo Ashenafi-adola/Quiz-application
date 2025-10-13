@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Exam, ExamTaker, Question
@@ -15,7 +16,7 @@ def Signin(request):
             return redirect('start-quiz')
         elif user is not None:
             login(request,user)
-            return redirect('take-quiz')
+            return redirect('begin-quiz')
     context = {
 
     }
@@ -79,15 +80,17 @@ def complete(request):
     return render(request,'core/complete.html',{})
 
 def startExam(request):
-    form = TakeExamForm()
+    titles = [x.title for x in Exam.objects.all()]
     if request.method == "POST":
-        exam = request.POST.get('exam')
-        return redirect('take-quiz')
+        exam = request.POST.get('title')
+        if exam in titles:            
+            return redirect(f'/take-quiz/{exam}')
     context = {
-        "form":form,
-
+       
     }
     return render(request,'core/start-exam.html',context)
-def takeExam(request):
-    
-    return render(request,'core/take-exam.html',{})
+def takeExam(request,title):
+    exam = Exam.objects.get(title=title)
+    question = exam.question_set.get(id=10)
+    print(question)
+    return render(request,'core/take-exam.html',{"question":question})

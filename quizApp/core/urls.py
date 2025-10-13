@@ -7,5 +7,5 @@ urlpatterns = [
     path('create-quiz/<str:exam>/<int:num>/<int:no>',views.create_quiz, name='create-quiz'),
     path('complete/', views.complete,name="complete"),
     path('start-quiz/', views.startExam,name='begin-quiz'),
-    path('take-quiz/', views.takeExam,name='take-quiz')
+    path('take-quiz/<str:title>', views.takeExam,name='take-quiz')
 ]
