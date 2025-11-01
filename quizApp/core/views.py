@@ -10,12 +10,7 @@ def Signin(request):
         username = request.POST.get("username")
         password = request.POST.get('password')
         user = authenticate(request,username=username,password=password)
-        if user.is_superuser:
-            login(request,user)
-            return redirect('start-quiz')
-        elif user is not None:
-            login(request,user)
-            return redirect('begin-quiz')
+        
     context = {
 
     }
@@ -23,60 +18,17 @@ def Signin(request):
 
 @login_required(login_url='signin')
 def start_quiz(request):
-    start = 'no'
-    if request.GET.get('start') == 'start':
-        try:
-            exams = Exam.objects.all()
-            for i in exams:
-                i.delete()
-        except:
-            pass
-        title = request.GET.get('title')
-        exam = Exam(title=title)
-        exam.save()
-        print(exam.id)
-        number_of_questions = int(request.GET.get('num_of_questions'))
-        if number_of_questions >= 5:
-            begin = 1
-            
-            return redirect(f'/create-quiz/{exam}/{number_of_questions}/{begin}')
-    
+
     context = {
-        "start":start,
+
     }
     return render(request, 'core/create_quiz.html',context)
 
 @login_required(login_url='signin')
 def create_quiz(request,exam,num,no):
-    Answers = ['A','B','C','D','a','b','c','d']
-    start = 'yes'
-    if no <= num:
-        if request.method == "POST":
-            Ques = request.POST.get("question")
-            A = request.POST.get("A")
-            B = request.POST.get("B")
-            C = request.POST.get("C")
-            D = request.POST.get("C")
-            Ans = request.POST.get("answer")
-            theExam = Exam.objects.get(title=exam)
-            if Ques is not '' and A is not '' and B is not '' and C is not '' and D is not '' and Ans in Answers:
-                question = theExam.question_set.create(
-                    question=Ques,
-                    A=A,
-                    B=B,
-                    C=C,
-                    D=D,
-                    Answer=Ans
-                )
-                question.save()
-                no+=1
-                return redirect(f'/create-quiz/{exam}/{num}/{no}')
-            else:
-                pass
-    else:
-        return redirect('complete')
+    
     context = {
-        "start":start,
+
     }
     return render(request, 'core/create_quiz.html',context)
 
@@ -86,16 +38,14 @@ def complete(request):
     return render(request,'core/complete.html',{})
 
 def startExam(request):
-    titles = [x.title for x in Exam.objects.all()]
-    if request.method == "POST":
-        exam = request.POST.get('title')
-        if exam in titles:            
-            return redirect(f'/take-quiz/{exam}')
+
     context = {
        
     }
     return render(request,'core/start-exam.html',context)
 def takeExam(request,title):
-    exam = Exam.objects.get(title=title)
-    question = exam.question_set.get(id=1)
-    return render(request,'core/take-exam.html',{"question":question})
+    
+    context = {
+
+    }
+    return render(request,'core/take-exam.html', context)
