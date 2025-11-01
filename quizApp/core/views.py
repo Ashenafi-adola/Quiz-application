@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .models import Exam, ExamTaker, Question
-from .form import TakeExamForm
+from .models import Exam, Question
 
 
 def Signin(request):
@@ -26,9 +25,16 @@ def Signin(request):
 def start_quiz(request):
     start = 'no'
     if request.GET.get('start') == 'start':
+        try:
+            exams = Exam.objects.all()
+            for i in exams:
+                i.delete()
+        except:
+            pass
         title = request.GET.get('title')
         exam = Exam(title=title)
         exam.save()
+        print(exam.id)
         number_of_questions = int(request.GET.get('num_of_questions'))
         if number_of_questions >= 5:
             begin = 1
@@ -91,6 +97,5 @@ def startExam(request):
     return render(request,'core/start-exam.html',context)
 def takeExam(request,title):
     exam = Exam.objects.get(title=title)
-    question = exam.question_set.get(id=10)
-    print(question)
+    question = exam.question_set.get(id=1)
     return render(request,'core/take-exam.html',{"question":question})
