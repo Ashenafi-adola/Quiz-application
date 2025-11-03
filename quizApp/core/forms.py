@@ -1,17 +1,11 @@
 from django.forms import ModelForm
-from .models import Exam,Question,Student
+from .models import Exam,Question
 from django.contrib.auth.models import User
-
-
-class StudentForm(ModelForm):
-    class Meta:
-        model = Student
-        fields = ['name']
 
 class ExamForm(ModelForm):
     class Meta:
         model = Exam
-        fields = ['title']
+        fields = ['exam_title']
 
 class QuestionForm(ModelForm):
     class Meta:

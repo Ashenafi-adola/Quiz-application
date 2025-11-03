@@ -4,7 +4,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Exam, Question
 from django.contrib.auth.forms import UserCreationForm
-from .forms import ExamForm, StudentForm, QuestionForm
+from .forms import ExamForm, QuestionForm
+from datetime import date
 
 def register(request):
     form = UserCreationForm()
@@ -35,9 +36,16 @@ def Signin(request):
     return render(request, 'core/login.html',context)
 @login_required(login_url='signin')
 def add_exam(request):
-    form = StudentForm()
+    form2 = ExamForm()
+    if request.method == 'POST':
+        form2 = ExamForm(request.POST)
+        if form2.is_valid() and form1.is_valid():
+            Exa = form2.save(commit=False)
+            Exa.published_date = date.today()
+            Exa.save()
+            return redirect('home')
     context = {
-        'form':form,
+        'form2':form2,
     }
     return render(request, 'core/add_exam.html', context)
 def home(request):
