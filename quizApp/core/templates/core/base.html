@@ -7,7 +7,11 @@
 </head>
 <body>
     <nav>
-        <h1>CREATE EXAM</h1>
+        <small>{{user}}</small>
+        <h1>EXAM CENTER</h1>
+        <a href="{% url 'home' %}">HOME</a>
+        <a href="{% url 'add_exam' %}">ADD EXAM</a>
+        <a href="">Sign in</a>
     </nav>
     <hr>
     {% block content %}
